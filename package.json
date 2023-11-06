@@ -1,0 +1,7 @@
+{
+  "name": "toldus",
+  "scripts": {
+    "start:frontend": "cd frontend/ && yarn start",
+    "start:backend": "cd backend/ && uvicorn main:app --reload"
+  }
+}
