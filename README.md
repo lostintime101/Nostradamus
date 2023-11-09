@@ -3,11 +3,11 @@
 
 "Prove you knew it"
 
-Told U So is an onchain predictions storage service providing mathematically indisputable evidence that you knew or thought something at a certain time. Predictions can be stored encrypted or unencrypted and can be shared in a way that makes it easy to prove to anyone that you knew something.
+Nostradamus provides mathematically indisputable cast-iron evidence that you knew or thought something at a specific point in time leaving your haters speechless.
 
 *Know something important but can't reveal it publicly?*  
 *Store an encrypted message on the public blockchain*    
-*Reveal it whenever you want.*  
+*Reveal it whenever you want.*
 
 ![Slide1](https://github.com/lostintime101/Nostradamus/assets/92709487/c9d7b0d6-d79c-4880-a153-d3417a5f81d3)
 ![Slide2](https://github.com/lostintime101/Nostradamus/assets/92709487/6bf4ba68-0366-46cd-a5c9-3e565f594667)
@@ -21,14 +21,4 @@ Told U So is an onchain predictions storage service providing mathematically ind
 ![Slide10](https://github.com/lostintime101/Nostradamus/assets/92709487/9b81cecf-054e-4235-a556-b1e18e3f9c2b)
 ![Slide11](https://github.com/lostintime101/Nostradamus/assets/92709487/1c95ddc0-db3a-4a0c-a862-a24f55dc8efe)
 
-
-
-
-
-
-
-
-
-
-
-Part of the 100 Builders Hackathon (https://100.builders/)
+Part of the Backdrop Build Program (https://100.builders/)
