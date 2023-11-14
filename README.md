@@ -1,5 +1,6 @@
 # Nostradamus
-[nostradamus1.xyz](https://nostradamus1.xyz) 
+Site: [nostradamus1.xyz](https://nostradamus1.xyz)  
+Docs: [docs.nostradamus1.xyz](https://docs.nostradamus1.xyz)
 
 "Prove you knew it"
 
