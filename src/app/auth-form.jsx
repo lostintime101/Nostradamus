@@ -7,14 +7,24 @@ export default function AuthForm() {
   const supabase = createClientComponentClient()
 
   return (
-    <Auth
-      supabaseClient={supabase}
-      view="magic_link"
-      appearance={{ theme: ThemeSupa }}
-      theme="dark"
-      showLinks={false}
-      providers={['twitter']}
-      redirectTo="http://localhost:3000/auth/callback"
-    />
+      <Auth
+        supabaseClient={supabase}
+        view="magic_link"
+        appearance={{
+          theme: ThemeSupa,
+          variables: {
+            default: {
+              colors: {
+                brand: '#C46492',
+                brandAccent: '#BB4D81',
+              },
+            },
+          },
+        }}
+        theme="light"
+        showLinks={false}
+        providers={['twitter']}
+        redirectTo="http://localhost:3000/auth/callback"
+      />
   )
 }
