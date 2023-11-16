@@ -9,6 +9,10 @@ export default function Home() {
         <p>Sign in with Twitter is recommended</p>
         <AuthForm />
       </div>
+      <footer>
+      <p>Part of <a href="https://backdropbuild.com/">Backdrop Build</a></p>
+      </footer>
       </>
   )
 }
+
