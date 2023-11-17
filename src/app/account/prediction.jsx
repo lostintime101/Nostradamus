@@ -1,6 +1,13 @@
 'use client'
+import { createClient } from '@supabase/supabase-js'
 import React, { useState, useEffect } from 'react'
 import sha256 from 'js-sha256';
+import dotenv from 'dotenv';
+dotenv.config({ path: '../../../.env.local' });
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function Prediction() {
 
@@ -8,6 +15,7 @@ export default function Prediction() {
   const [prediction, setPrediction] = useState('')
   const [salt, setSalt] = useState('')
   const [hash, setHash] = useState('')
+  const [final, setFinal] = useState('')
 
   let twitterId = "dummyTwitterID"
   
@@ -17,10 +25,11 @@ export default function Prediction() {
   }
 
     const updateHash = () => {
-        const final = "Prediction: " + prediction + "\nTwitter ID: " + twitterId + "\nSalt: " + salt
-        const newHash = sha256(final);
+        const combination = "Prediction: " + prediction + "\nTwitter ID: " + twitterId + "\nSalt: " + salt
+        const newHash = sha256(combination);
         setHash(newHash)
-        console.log("final: ", final, "hash: ", newHash)
+        setFinal(combination)
+        console.log("final: ", combination, "hash: ", newHash)
     }
 
     useEffect(() => {
@@ -38,6 +47,33 @@ export default function Prediction() {
         setPrediction(e.target.value)
     };
 
+    const updateDb = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('predictions')
+          .insert([
+            {
+              sender: 'c8b2919b-80c7-45b0-aef0-29f7ca99097e',
+              prediction_txt: final,
+              prediction_hash: hash
+            }
+          ])
+          .select();
+    
+        console.log("error: ", error);
+    
+        if (error) {
+          console.error('Error:', error.message);
+        } else {
+          console.log('Data:', data);
+        }
+      } catch (error) {
+        alert('Error loading user data!');
+        console.error('Unexpected error:', error);
+      }
+    };
+    
+      
   return (
     <>
     <div>
@@ -61,6 +97,7 @@ export default function Prediction() {
         id="salt"
         type="text"
         value={salt}
+        readOnly
         />
         <button onClick={() => setSalt(generateSalt())}>Regenerate</button>
     </div>
@@ -70,10 +107,11 @@ export default function Prediction() {
         id="hash"
         type="text"
         value = {hash}
+        readOnly
         />
     </div>
     <button
-        //   onClick={() => validate input, call backend edge function}
+        onClick={() => updateDb()}
         >Create</button>
     </>
   )
