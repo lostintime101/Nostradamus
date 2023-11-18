@@ -48,6 +48,25 @@ export default function Prediction() {
     };
 
     const updateDb = async () => {
+
+    // LOGIC FOR CALLING EDGE FUNCTION
+      try {
+        const response = await fetch('https://voiooresdzvtrovknvpz.supabase.co/functions/v1/hello2', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: 'Lostin9' }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+
+      // LOGIC FOR UPDATING DB
       try {
         const { data, error } = await supabase
           .from('predictions')
@@ -78,37 +97,23 @@ export default function Prediction() {
     <>
     <div>
         <label htmlFor="prediction">New Prediction</label>
-        <input
-        type="text"
+        <input type="text"
         onChange={(e) => handlePredictionChange(e)}
-        placeholder="Enter prediction, max 300 chars"
+        placeholder="Enter your prediction here"
       />
     </div>
     <div>
         <label htmlFor="id">Twitter ID</label>
-        <input
-        type="text"
-        value={twitterId} disabled
-        />
+        <input type="text" value={twitterId} disabled />
     </div>
     <div>
         <label htmlFor="salt">Salt</label>
-        <input
-        id="salt"
-        type="text"
-        value={salt}
-        readOnly
-        />
+        <input id="salt" type="text" value={salt} readOnly />
         <button onClick={() => setSalt(generateSalt())}>Regenerate</button>
     </div>
     <div>
         <label htmlFor="hash">Hash</label>
-        <input
-        id="hash"
-        type="text"
-        value = {hash}
-        readOnly
-        />
+        <input id="hash" type="text" value = {hash} readOnly />
     </div>
     <button
         onClick={() => updateDb()}

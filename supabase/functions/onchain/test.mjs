@@ -3,10 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: '../../../.env.local' });
 const solanaRPC = process.env.SOLANA_RPC;
+const SECRET = process.env.SOLANA_PRIVATE_KEY
 
 // https://www.quicknode.com/guides/solana-development/getting-started/how-to-use-the-solana-memo-program#create-log-memo-function
 
-const secret = [153,80,118,72,44,231,22,196,70,63,118,163,128,4,64,139,41,174,240,216,169,28,133,49,183,231,249,102,231,214,46,22,3,91,174,177,220,202,4,95,153,234,63,43,91,135,111,225,182,27,253,242,230,30,9,107,239,137,246,30,199,25,178,95];
+const secret = SECRET.split(",")
 const fromKeypair = Keypair.fromSecretKey(new Uint8Array(secret));
 
 const QUICKNODE_RPC = `https://orbital-few-diamond.solana-devnet.quiknode.pro/${solanaRPC}/`;
