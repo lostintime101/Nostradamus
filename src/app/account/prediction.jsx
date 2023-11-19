@@ -17,7 +17,7 @@ export default function Prediction() {
   const [hash, setHash] = useState('')
   const [final, setFinal] = useState('')
 
-  let twitterId = "dummyTwitterID"
+  const twitterId = "dummyTwitterID"
   
 
   function generateSalt() {
@@ -49,15 +49,15 @@ export default function Prediction() {
 
     const updateDb = async () => {
 
-    // LOGIC FOR CALLING EDGE FUNCTION
+    // LOGIC FOR CALLING MEMO TXS
       try {
-        const response = await fetch('https://voiooresdzvtrovknvpz.supabase.co/functions/v1/hello2', {
+
+        const response = await fetch('https://nostradamus-server-git-main-lostintime101s-projects.vercel.app/', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: 'Lostin9' }),
+          body: JSON.stringify({ memo: hash }),
         });
 
         const data = await response.json();
