@@ -46,6 +46,9 @@ export default function Prediction() {
         else updateHash()
       }, [prediction, salt]);
 
+    useEffect(() => {
+      if(txsHash !== '') updateDb()
+      }, [txsHash]);
 
     const handlePredictionChange = (e) => {
         setPrediction(e.target.value)
@@ -78,13 +81,12 @@ export default function Prediction() {
       // GETTING TXS HASH
       try {
 
-        let memo = hash // hash
-        console.log(hash) 
+        const memo = hash
         const endpoint = `https://orbital-few-diamond.solana-devnet.quiknode.pro/${RPC}/`
         const solanaConnection = new Connection(endpoint)
         const searchAddress = 'E7JqLrJkPgrGVdLxhjUG35cNt8JrFVu34mw2vUJfeM4';
         const pubKey = new PublicKey(searchAddress);
-        let transactionList = await solanaConnection.getSignaturesForAddress(pubKey, {limit: 10});
+        const transactionList = await solanaConnection.getSignaturesForAddress(pubKey, {limit: 10});
           
         for (const transaction of transactionList) {
             if (transaction.memo === "[64] " + memo) {        
@@ -92,7 +94,7 @@ export default function Prediction() {
                 console.log("complete: ", `https://explorer.solana.com/tx/${transaction.signature}?cluster=devnet`)
                 return transaction.signature
             }
-      
+        
         return "error, can't get transaction signature"
           
       }
@@ -111,7 +113,8 @@ export default function Prediction() {
             {
               sender: 'c8b2919b-80c7-45b0-aef0-29f7ca99097e',
               prediction_txt: final,
-              prediction_hash: hash
+              prediction_hash: hash,
+              txs_hash: txsHash
             }
           ])
           .select();
@@ -159,8 +162,7 @@ export default function Prediction() {
         onClick={ async () => {
           putOnchain()
           await sleep(15000);
-          await getTransactionHash()
-          updateDb()
+          await getTransactionHash();
         }}
         >Create</button>
     </>

@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import AccountForm from './account-form'
 import Header from './header';
 import Footer from './footer';
-import Prediction from './prediction';
 
 export default async function Account() {
   const cookieStore = cookies()
@@ -19,7 +18,6 @@ export default async function Account() {
       <main style={{ marginTop: '70px', padding: '20px' }}>
         <AccountForm session={session} />
       </main>
-      <Prediction />
     <Footer />
     </>
     )

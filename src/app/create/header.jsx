@@ -22,7 +22,7 @@ export default function Header() {
 
     {/* Settings Cog Icon */}
     <div style={{ padding: '0px 10px 0px 30px' }}>
-    <Link href="/settings"><FiSettings style={{ fontSize: '28px', color: '#282530'}} /></Link>
+    <Link href="/profile"><FiSettings style={{ fontSize: '28px', color: '#282530'}} /></Link>
     </div>
   </header>
   )
