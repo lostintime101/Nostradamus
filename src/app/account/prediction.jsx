@@ -1,12 +1,15 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
 import React, { useState, useEffect } from 'react'
+import { Connection, PublicKey } from "@solana/web3.js"
 import sha256 from 'js-sha256';
 import dotenv from 'dotenv';
 dotenv.config({ path: '../../../.env.local' });
 
+const RPC = "22e66a6ccfc4c51bd2a01484ff2071019c67a0bc"
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function Prediction() {
@@ -16,6 +19,7 @@ export default function Prediction() {
   const [salt, setSalt] = useState('')
   const [hash, setHash] = useState('')
   const [final, setFinal] = useState('')
+  const [txsHash, setTxsHash] = useState('')
 
   const twitterId = "dummyTwitterID"
   
@@ -47,13 +51,12 @@ export default function Prediction() {
         setPrediction(e.target.value)
     };
 
-    const updateDb = async () => {
+    const putOnchain = async () => {
 
-    // LOGIC FOR CALLING MEMO TXS
+    // CALLING MEMO TXS
       try {
-
         const response = await fetch('https://nostradamus-server-git-main-lostintime101s-projects.vercel.app/', {
-          method: 'POST',
+          method: 'POST', 
           headers: {
             'Content-Type': 'application/json',
           },
@@ -61,12 +64,46 @@ export default function Prediction() {
         });
 
         const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
+        console.log("This is your datoooor: ", data);
 
-      // LOGIC FOR UPDATING DB
+        return data
+
+      } catch (error) {
+        console.error("This is an Erroooor: ", error);
+      }
+    };
+
+    const getTransactionHash = async () => {
+
+      // GETTING TXS HASH
+      try {
+
+        let memo = hash // hash
+        console.log(hash) 
+        const endpoint = `https://orbital-few-diamond.solana-devnet.quiknode.pro/${RPC}/`
+        const solanaConnection = new Connection(endpoint)
+        const searchAddress = 'E7JqLrJkPgrGVdLxhjUG35cNt8JrFVu34mw2vUJfeM4';
+        const pubKey = new PublicKey(searchAddress);
+        let transactionList = await solanaConnection.getSignaturesForAddress(pubKey, {limit: 10});
+          
+        for (const transaction of transactionList) {
+            if (transaction.memo === "[64] " + memo) {        
+                setTxsHash(transaction.signature)
+                console.log("complete: ", `https://explorer.solana.com/tx/${transaction.signature}?cluster=devnet`)
+                return transaction.signature
+            }
+      
+        return "error, can't get transaction signature"
+          
+      }
+          
+        } catch (error) {
+          console.error("This is an Erroooor: ", error);
+        }
+      };
+
+    const updateDb = async () => {
+      // UPDATING DB
       try {
         const { data, error } = await supabase
           .from('predictions')
@@ -92,7 +129,10 @@ export default function Prediction() {
       }
     };
     
-      
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
   return (
     <>
     <div>
@@ -116,7 +156,12 @@ export default function Prediction() {
         <input id="hash" type="text" value = {hash} readOnly />
     </div>
     <button
-        onClick={() => updateDb()}
+        onClick={ async () => {
+          putOnchain()
+          await sleep(15000);
+          await getTransactionHash()
+          updateDb()
+        }}
         >Create</button>
     </>
   )
