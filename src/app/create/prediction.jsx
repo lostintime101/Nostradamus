@@ -22,7 +22,6 @@ export default function Prediction() {
   const [txsHash, setTxsHash] = useState('')
 
   const twitterId = "dummyTwitterID"
-  
 
   function generateSalt() {
     return crypto.randomBytes(8).toString('hex');

@@ -1,15 +1,14 @@
-import React from 'react';
+import React from 'react'
 import Link from 'next/link';
-import Image from 'next/image';
 import { FiSettings } from 'react-icons/fi';
 
 export default function Header() {
   return (
 <header style={{ position: 'fixed', top: 0, left: 0, right: 0, backgroundColor: '#fff', padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
     <div>
-      <Link href="/"><Image src="/../../../favicon.ico" alt="Nostramadus Logo" width={35} height={35} /></Link>
+      <Link href="/"><img src="../../../favicon.ico" style={{ maxWidth: '35px', height: 'auto' }} /></Link>
     </div>
-
+    
     <nav style={{ flexGrow: 1 }}>
       <ul style={{ listStyle: 'none', display: 'flex', gap: '30px', margin: 0, padding: 0, justifyContent: 'flex-end' }}>
         <li>

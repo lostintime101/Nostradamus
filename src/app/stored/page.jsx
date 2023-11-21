@@ -2,7 +2,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import Header from './header';
 import Footer from './footer';
-import Prediction from './prediction';
+import Predictions from './predictions';
 
 export default async function Account() {
   const cookieStore = cookies()
@@ -16,7 +16,7 @@ export default async function Account() {
     <>
     <Header />
       <main style={{ marginTop: '70px', padding: '20px' }}>
-        <Prediction />  
+        <Predictions />
       </main>
     <Footer />
     </>
