@@ -2,5 +2,6 @@
     "deno.path": "C:\\Users\\LENOVO\\.deno\\bin\\deno.exe",
     "deno.enable": true,
     "deno.lint": true,
-    "deno.unstable": true
+    "deno.unstable": true,
+    "editor.fontSize": 15
 }

@@ -1,6 +1,7 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
 import React, { useState, useEffect } from 'react'
+import PredictionList from './prediction_list'
 import dotenv from 'dotenv';
 dotenv.config({ path: '../../../.env.local' });
 
@@ -9,14 +10,13 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const userUUID = 'c8b2919b-80c7-45b0-aef0-29f7ca99097e'
 
-export default function Predictions () {
+export default function PredictionsWrapper () {
 
 const [userPredictions, setUserPredictions] = useState([])
 
     useEffect(() => {
-        if(userPredictions.length !== 0)
-        console.log("userPredictions: ", userPredictions)
-    }, [userPredictions]);
+      fetchPredictons()
+    }, []);
 
     const fetchPredictons = async () => {
         try {
@@ -38,12 +38,6 @@ const [userPredictions, setUserPredictions] = useState([])
       };
     
     return(
-        
-        <button onClick={ async () => fetchPredictons()}>Get Predictions</button>
-        // todos.map((todo) => {
-        //     return <ToDo key={todo.id} todo={todo} checkboxToggle={checkboxToggle}/>;
-        // })
-
-        
+          <PredictionList userPredictions={ userPredictions }/>
     );
 }

@@ -2,7 +2,8 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import Header from './header';
 import Footer from './footer';
-import PredictionsWrapper from './predictionsWrapper';
+import PredictionWrapper from './predictionWrapper'
+import SharePoster from './generateJpeg'
 
 export default async function Account() {
   const cookieStore = cookies()
@@ -16,7 +17,8 @@ export default async function Account() {
     <>
     <Header />
       <main style={{ marginTop: '70px', padding: '20px' }}>
-        <PredictionsWrapper />
+        <PredictionWrapper/>
+        <SharePoster />
       </main>
     <Footer />
     </>
