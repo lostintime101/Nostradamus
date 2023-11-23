@@ -1,4 +1,5 @@
 import AuthForm from './auth-form'
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
         <AuthForm />
       </div>
       <footer>
-      <p>Part of <a href="https://backdropbuild.com/">Backdrop Build</a></p>
+      <p>Part of <Link href="https://backdropbuild.com/">Backdrop Build</Link></p>
       </footer>
       </>
   )

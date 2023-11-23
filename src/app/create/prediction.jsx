@@ -28,7 +28,7 @@ export default function Prediction() {
   }
 
     const updateHash = () => {
-        const combination = "Prediction: " + prediction + "\nTwitter ID: " + twitterId + "\nSalt: " + salt
+        const combination = "Prediction: " + prediction + "     Twitter ID: " + twitterId + "     Salt: " + salt
         const newHash = sha256(combination);
         setHash(newHash)
         setFinal(combination)
