@@ -12,6 +12,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const userUUID = 'c8b2919b-80c7-45b0-aef0-29f7ca99097e'
 // const userUUID = 'c8b2919b-80c7-45b0-aef0-29f7ca99097f'
 
+
 export default function PredictionWrapper () {
 
 const [thisPrediction, setThisPrediction] = useState()
@@ -33,20 +34,12 @@ const fullPredictionForCopy = useRef(null)
     useEffect(() => {
 
       if(thisPrediction && thisPrediction[0] && thisPrediction[0].prediction_txt){
-
-        let lines = thisPrediction[0].prediction_txt.split('\n');
-        let extractedTextArray = [];
   
-        lines.forEach(line => {
-          let colonIndex = line.indexOf(':');
-          if (colonIndex !== -1) {
-            let extractedText = line.slice(colonIndex + 1).trim();
-            extractedTextArray.push(extractedText);
-          }
-        });
-        setRawPrediction(extractedTextArray[0])
-        setRawUser(extractedTextArray[1])
-        setRawSalt(extractedTextArray[2])
+        const regex = /Prediction: (.*?)\s+Twitter ID: (.*?)\s+Salt: (.*)/;
+        const match = thisPrediction[0].prediction_txt.match(regex);
+        setRawPrediction(match[1])
+        setRawUser(match[2])
+        setRawSalt(match[3])
         setRawDate(formatDate(thisPrediction[0].created_at))
         setRawTxsHash(thisPrediction[0].txs_hash)
         setRawPredictionHash(thisPrediction[0].prediction_hash)
@@ -84,13 +77,14 @@ const fullPredictionForCopy = useRef(null)
     const fetchPredicton = async () => {
         const currentUrl = window.location.href;
         const currentSuffix = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
+        if(currentSuffix.length != 12) return console.error("error, incorrect suffix length");
 
         try {
         let { data, error } = await supabase
             .from('predictions')
             .select("*")
             .eq('sender', userUUID)
-            .eq('prediction_hash', currentSuffix);
+            .ilike('prediction_hash', `${currentSuffix}%`)
       
           setThisPrediction(data)
       
@@ -158,16 +152,15 @@ const fullPredictionForCopy = useRef(null)
             <label htmlFor="hash">Hash</label>
             <input id="hash" type="text" value={hash} readOnly />
           </div>
+          
+          <br></br>
+            <p>Triple check this hash with a 3rd-party SHA-256 hash generators (external links)</p>
+            <Link href="https://passwordsgenerator.net/sha256-hash-generator/">PasswordGenerator.net</Link>
+            <Link href="https://codebeautify.org/sha256-hash-generator">CodeBeautify.org</Link>
+            <Link href="https://tools.keycdn.com/sha256-online-generator">KeyCdn.com</Link>
+          <br></br>
+
         </div>
-
-
-        <p></p>
-
-        <div id="section2">
-          <button>Share</button>
-        </div>
-        
-
         </> 
     );
 }
