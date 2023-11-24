@@ -38,6 +38,26 @@ const [userPredictions, setUserPredictions] = useState([])
       };
     
     return(
-          <PredictionList userPredictions={ userPredictions }/>
+<div className="overflow-x-auto">
+  <table className="table">
+    {/* head */}
+    <thead>
+      <tr>
+        <th>
+          <label>
+            <input type="checkbox" className="checkbox" />
+          </label>
+        </th>
+        <th>Date</th>
+        <th>Prediction</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <PredictionList userPredictions={ userPredictions }/>
+    </tbody>
+  </table>
+</div>
     );
 }

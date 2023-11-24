@@ -44,7 +44,7 @@ h1 {
   margin-right: auto;
 }
 
-p {
+/* p {
   font-family: 'Inter', sans-serif;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -57,9 +57,9 @@ p {
 a {
   color: var(--custom-color-brand);
   text-decoration: none;
-}
+} */
 
-footer {
+/* footer {
 position: fixed; 
 bottom: 0;
 left: 0;
@@ -71,4 +71,4 @@ display: inline;
 footer p {
   font-size: 0.66rem;
   color: #999
-}
+} */

@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/react": "18.2.37",
     "autoprefixer": "^10.0.1",
+    "daisyui": "^4.4.6",
     "eslint": "^8",
     "eslint-config-next": "14.0.2",
     "postcss": "^8",

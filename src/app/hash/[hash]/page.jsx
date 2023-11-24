@@ -18,7 +18,7 @@ export default async function Account() {
     <Header />
       <main style={{ marginTop: '70px', padding: '20px' }}>
         <PredictionWrapper/>
-        <SharePoster />
+        <SharePoster/>
       </main>
     <Footer />
     </>

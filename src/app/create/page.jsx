@@ -15,7 +15,7 @@ export default async function Account() {
   return (
     <>
     <Header />
-      <main style={{ marginTop: '70px', padding: '20px' }}>
+      <main className="h-screen flex flex-col">
         <Prediction />  
       </main>
     <Footer />

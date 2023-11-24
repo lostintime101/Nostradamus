@@ -24,7 +24,7 @@ const [rawDate, setRawDate] = useState()
 const [rawTxsHash, setRawTxsHash] = useState()
 const [rawPredictionHash, setRawPredictionHash] = useState()
 const [hash, setHash] = useState('')
-
+ 
 const fullPredictionForCopy = useRef(null)
 
     useEffect(() => {

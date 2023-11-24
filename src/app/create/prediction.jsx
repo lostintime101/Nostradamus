@@ -137,33 +137,68 @@ export default function Prediction() {
 
   return (
     <>
-    <div>
-        <label htmlFor="prediction">New Prediction</label>
-        <input type="text"
-        onChange={(e) => handlePredictionChange(e)}
-        placeholder="Enter your prediction here"
-      />
+    <div className="grid grid-cols-3 gap-4 ">
+    <div class="justify-self-end"></div>
+    <div className="min-w-800 max-w-2000">
+        <textarea 
+          className="textarea textarea-bordered textarea-lg rounded-box w-full" 
+          onChange={(e) => handlePredictionChange(e)}
+          placeholder="Enter your prediction here"
+          maxLength={300}
+          rows={4}
+        ></textarea>
+        <label className="label">
+        <span className="label-text-alt"></span>
+        <span className="label-text-alt">Limit: {prediction.length} / 300 characters</span>
+        </label>
     </div>
-    <div>
-        <label htmlFor="id">Twitter ID</label>
-        <input type="text" value={twitterId} disabled />
+    <div class="..."></div>
+    <div class="justify-self-end self-center">User</div>
+    <div className="">
+        <label htmlFor="id"></label>
+        <input 
+          className="input input-bordered w-full rounded-box"
+          type="text" 
+          value={twitterId} disabled 
+        />
     </div>
-    <div>
-        <label htmlFor="salt">Salt</label>
-        <input id="salt" type="text" value={salt} readOnly />
-        <button onClick={() => setSalt(generateSalt())}>Regenerate</button>
+    <div class="..."></div>
+    <div className="tooltip tooltip-left justify-self-end self-center" 
+    data-tip="random sequence"><span className="underline">?</span> Salt</div>
+    <div className="">
+        <label htmlFor="salt"></label>
+          <input 
+          className="input input-bordered rounded-box w-full"
+          id="salt" type="text"
+          value={salt} readOnly 
+          />
     </div>
-    <div>
-        <label htmlFor="hash">Hash</label>
-        <input id="hash" type="text" value = {hash} readOnly />
+    <div class="..."><button class="btn btn-outline border-gray-500 rounded-box" onClick={() => setSalt(generateSalt())}>Regenerate</button></div>
+    <div class="justify-self-end self-center">Hash</div>
+    <div class="justify-items-end">
+        <label htmlFor="hash"></label>
+        <textarea 
+          className="textarea textarea-bordered textarea-lg rounded-box w-full" 
+          id="hash" 
+          type="text" 
+          rows={3}
+          value={hash} readOnly
+        ></textarea>
     </div>
-    <button
+    <div class="..."></div>
+    <div class="justify-self-end"></div>
+    <div className="justify-self-center">
+    <button class="btn btn-wide btn-outline btn-primary rounded-box"
         onClick={ async () => {
           putOnchain()
           await sleep(15000);
           await getTransactionHash();
         }}
         >Create</button>
+        </div>
+    <div class="..."></div>
+    </div>
+    
     </>
   )
 }
