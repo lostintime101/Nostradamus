@@ -15,8 +15,10 @@ export default async function Account() {
   return (
     <>
     <Header />
-      <main className="h-screen flex flex-col">
-        <Prediction />  
+      <main className="h-screen flex flex-col ">
+        <div className="container">
+          <Prediction />  
+        </div>
       </main>
     <Footer />
     </>

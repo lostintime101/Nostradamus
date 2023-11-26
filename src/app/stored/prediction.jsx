@@ -28,13 +28,8 @@ export default function Prediction( { userPrediction } ) {
 
   return (   
     <tr>
-    <th>
-      <label>
-        <input type="checkbox" className="checkbox" />
-      </label>
-    </th>
     <td>{formatDate(userPrediction.created_at)}</td>
-    <td>{userPrediction.prediction_txt.split(":")[1]}</td>
+    <td>{userPrediction.prediction_txt.split(":")[1].slice(0,-11)}</td>
     <td>Hidden</td>
     <th>
       <Link href={"/hash/" + userPrediction.prediction_hash.substring(0, 12)}><button className="btn btn-ghost btn-sm">Reveal</button></Link>

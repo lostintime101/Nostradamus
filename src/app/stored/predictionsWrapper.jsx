@@ -43,11 +43,6 @@ const [userPredictions, setUserPredictions] = useState([])
     {/* head */}
     <thead>
       <tr>
-        <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th>
         <th>Date</th>
         <th>Prediction</th>
         <th>Status</th>

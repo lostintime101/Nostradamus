@@ -137,19 +137,19 @@ export default function Prediction() {
 
   return (
     <>
-    <div className="grid grid-cols-3 gap-4 ">
+    <div className="grid grid-cols-3 gap-8">
     <div class="justify-self-end"></div>
     <div className="min-w-800 max-w-2000">
         <textarea 
           className="textarea textarea-bordered textarea-lg rounded-box w-full" 
           onChange={(e) => handlePredictionChange(e)}
-          placeholder="Enter your prediction here"
-          maxLength={300}
+          placeholder="Type your prediction here..."
+          maxLength={140}
           rows={4}
         ></textarea>
         <label className="label">
         <span className="label-text-alt"></span>
-        <span className="label-text-alt">Limit: {prediction.length} / 300 characters</span>
+        <span className="label-text-alt">Limit: {prediction.length} / 140 characters</span>
         </label>
     </div>
     <div class="..."></div>
@@ -182,7 +182,7 @@ export default function Prediction() {
           id="hash" 
           type="text" 
           rows={3}
-          value={hash} readOnly
+          value={hash} disabled
         ></textarea>
     </div>
     <div class="..."></div>
