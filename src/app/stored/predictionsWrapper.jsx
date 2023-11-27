@@ -46,7 +46,7 @@ const [userPredictions, setUserPredictions] = useState([])
         <th>Date</th>
         <th>Prediction</th>
         <th>Status</th>
-        <th>Action</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>

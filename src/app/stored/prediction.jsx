@@ -28,11 +28,11 @@ export default function Prediction( { userPrediction } ) {
 
   return (   
     <tr>
-    <td>{formatDate(userPrediction.created_at)}</td>
-    <td>{userPrediction.prediction_txt.split(":")[1].slice(0,-11)}</td>
+    <td><p className="line-clamp-2">{formatDate(userPrediction.created_at)}</p></td>
+    <td><p className="line-clamp-2">{userPrediction.prediction_txt.split(":")[1].slice(0,-11)}</p></td>
     <td>Hidden</td>
     <th>
-      <Link href={"/hash/" + userPrediction.prediction_hash.substring(0, 12)}><button className="btn btn-ghost btn-sm">Reveal</button></Link>
+      <Link href={"/hash/" + userPrediction.prediction_hash.substring(0, 12)}><button className="btn btn-primary btn-sm">Select</button></Link>
     </th>
   </tr>
   )
