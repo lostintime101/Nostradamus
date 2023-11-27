@@ -97,16 +97,33 @@ const fetchPredicton = async () => {
     }
   };
 
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
   return (
       <main>
         <div id="section1" className="h-screen flex flex-col items-center justify-center">
-          <PredictionWrapper rawDate={rawDate} rawTxsHash={rawTxsHash} rawPrediction={rawPrediction} rawUser={rawUser}/>
+          <PredictionWrapper rawDate={rawDate} rawTxsHash={rawTxsHash} rawPrediction={rawPrediction} rawUser={rawUser} rawPredictionHash={rawPredictionHash}/>
+          <div className="p-4 space-x-6">
+            <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section2')}>Verify Hash</button>
+            <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section3')}>Share</button>
+          </div>
         </div>
         <div id="section2" className="h-screen flex flex-col items-center justify-center">
           <Checker rawPredictionFullText={rawPredictionFullText}/>
+          <div>
+          <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section3')}>Share</button>
+          </div>
         </div>
         <div id="section3" className="h-screen flex flex-col items-center justify-center">
           <SharePoster/>
+          <div> 
+          <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section1')}>Back to top</button>
+          </div>
         </div>
       </main>
     )
