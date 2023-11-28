@@ -1,6 +1,6 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Connection, PublicKey } from "@solana/web3.js"
 import sha256 from 'js-sha256';
 import dotenv from 'dotenv';

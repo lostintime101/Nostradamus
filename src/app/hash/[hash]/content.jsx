@@ -1,7 +1,7 @@
 "use client"
 import PredictionWrapper from './predictionWrapper'
 import Checker from './checker'
-import SharePoster from './generateJpeg'
+import SharePoster from './sharePoster'
 import React, { useState, useEffect } from 'react'
 
 import { createClient } from '@supabase/supabase-js'
@@ -120,8 +120,10 @@ const fetchPredicton = async () => {
           </div>
         </div>
         <div id="section3" className="h-screen flex flex-col items-center justify-center">
-          <SharePoster/>
-          <div> 
+          <div className="flex flex-col items-center justify-center space-y-4"> 
+          <p>Right click image to download and share</p>
+          <SharePoster rawDate={rawDate} rawTxsHash={rawTxsHash} rawPrediction={rawPrediction} rawUser={rawUser} rawPredictionHash={rawPredictionHash}/>
+          <p>Or copy link: <span className="underline">{window.location.href}</span></p>
           <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section1')}>Back to top</button>
           </div>
         </div>

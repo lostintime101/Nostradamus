@@ -1,33 +1,28 @@
 "use client"
 import React, { useState, useEffect, useRef } from "react";
-import QRCode from 'qrcode.react';
+// import QRCode from 'qrcode';
+import QRCode from 'qrcode'
 
-const txsHash = "2LyN1obLW7BYw1FWT5dzjHfe9AYtBuiAd5fEwyNEJfWLNJ7D3jFvkYf3AUUxSrqKSDE1qba2hTH2uihT2w83JJLn";
-const inputDate = "2023-11-20 15:02:33.075252+00";
 const userTwitterHandle = truncateString("Freddie Raynolds", 18);
 
-
 function formatDate(inputDate) {
-  const dateParts = inputDate.split(/[- :]/);
-  const year = parseInt(dateParts[0]);
-  const month = parseInt(dateParts[1]);
-  const day = parseInt(dateParts[2]);
-  const hour = parseInt(dateParts[3]);
-  const minute = parseInt(dateParts[4]);
 
-  const inputDateTime = new Date(Date.UTC(year, month - 1, day, hour, minute));
+  let dateObject = new Date(inputDate);
 
-  const options = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "UTC"
+  let options = {
+   month: 'short',
+   day: 'numeric',
+   year: 'numeric',
+   hour: 'numeric',
+   minute: 'numeric',
+   hour12: true,
+   timeZone: 'UTC'
   };
-
-  const formattedDate = inputDateTime.toLocaleString("en-US", options);
+  
+  let formattedDate = dateObject.toLocaleString("en-US", options);
+  console.log(formattedDate);
   return formattedDate;
+
 }
 
 function truncateString(str, maxLength) {
@@ -37,18 +32,16 @@ function truncateString(str, maxLength) {
   return str;
 }
 
+export default function SharePoster({ rawDate, rawTxsHash, rawPrediction, rawUser, rawPredictionHash }) {
 
-
-const SharePoster = () => {
   const [image, setImage] = useState(null);
   const [qrcode, setQrcode] = useState(null);
   const [url, setUrl] = useState('');
   const canvas = useRef(null);
-  const formattedDate = formatDate(inputDate) + " UTC";
   const storedText = "Stored on";
-  const predictionText = '“The tokenomics mechanism behind Luna is fundamentally flawed. It WILL go to zero"';
-  const attributeText = `Predicted by ${userTwitterHandle}`;
-  const timestampText = "- " + formatDate(inputDate) + " UTC";
+  const predictionText = '“' + rawPrediction + '”';
+  const attributeText = `Predicted by ${String(rawUser)}`;
+  const timestampText = "- " + formatDate(String(rawDate)) + " UTC";
   const verifyText = "VERIFY";
   const line1Text = "The mathematical properties of the public blockchain";
   const line2Text = "guarantee INDISPUTABLE EVIDENCE of the";
@@ -57,15 +50,29 @@ const SharePoster = () => {
   const line5Text = "from the account holder specified above";
   const line6Text = "2. It is UTTERLY IMPOSSIBLE to have been tampered";
   const line7Text = "with, altered or edited in any manner since creation";
-  const addressText = "Verification address: nostradamus1.xyz/" + txsHash.substring(0, 12);
-  const transactionText = "Transaction Hash: " + txsHash;
+  const addressText = "Verification address: nostradamus1.xyz/" + String(rawPredictionHash).substring(0, 12);
+  const transactionText = "Transaction: " + rawTxsHash;
 
   useEffect(() => {
-    const background_img = new Image();
+
+    let canvas = document.createElement('canvas');
+    canvas.width = 300;
+    canvas.height = 300;
+    let context = canvas.getContext('2d');
+
+
+    QRCode.toCanvas(canvas, window.location.href, function (error) {
+      if (error) console.error(error);
+    });
+
+    let imageDataUrl = canvas.toDataURL('image/png');
+
+    const background_img = new Image();  
+    // background_img.src = "./posterBackground.jpg"; // NOT WORKING, DON'T KNOW WHY
     background_img.src = "https://i.ibb.co/sQxLKSW/Background-New2.jpg";
     background_img.onload = () => setImage(background_img);
     const qr_img = new Image();
-    qr_img.src = "https://i.ibb.co/nmTw0Ky/Qrcode-wikipedia.jpg";
+    qr_img.src = imageDataUrl;
     qr_img.onload = () => setQrcode(qr_img);
   }, []);
 
@@ -82,7 +89,7 @@ const SharePoster = () => {
       ctx.fillRect(0, 0, 640, 707);
       ctx.drawImage(image, 0, 0);
       ctx.drawImage(qrcode, 50, 415, 170, 170);
-
+      
       const maxWidth = 20;
       const maxLines = 5;
       let newLine = "";
@@ -125,7 +132,8 @@ const SharePoster = () => {
         else ctx.fillText(lines[i], y+32, x);
         x = x + buffer;
       }
-    
+     
+
       ctx.font = `bold 22px 'Times New Roman', serif`;
       ctx.fillText(storedText, 400, 15 + 25);
 
@@ -164,6 +172,24 @@ const SharePoster = () => {
 
       ctx.font = `bold 10px 'Times New Roman', serif`;
       ctx.fillText(transactionText, 25, 682);
+
+      // Save the current state of the context
+      ctx.save();
+
+      // Translate the context to the desired position
+      ctx.translate(x, y);
+      console.log("henlooooo")
+      // Generate a QR code and draw it onto the canvas
+      QRCode.toCanvas(ctx, url, function (error) {
+      if (error){
+        console.error(error)
+      } else {
+        console.log('success!');
+      }
+      })
+      console.log("can you see me?")
+      // Restore the context to its original state
+      ctx.restore();
     }
   }, [
     image,
@@ -185,14 +211,26 @@ const SharePoster = () => {
     line7Text
   ]);
 
+  // useEffect(() => {
+  //   if (image && canvas.current && url) {
+  //     const ctx = canvas.current.getContext("2d");
+
+  //     // Draw the QR code on top of the existing content
+  //     QRCode.toCanvas(canvas.current, url, { width: 170, height: 170 }, (error, qrcodeCanvas) => {
+  //       if (error) {
+  //         console.error('Error generating QR code:', error);
+  //       } else {
+  //         ctx.drawImage(qrcodeCanvas, 50, 415); // Adjust position based on your layout
+  //       }
+  //     });
+  //   }
+  // }, [image, canvas, url]);
+
   return (
     <div>
       <div>
         <canvas ref={canvas} width={640} height={707} />
       </div>
-      
     </div>
   );
 };
-
-export default SharePoster;
