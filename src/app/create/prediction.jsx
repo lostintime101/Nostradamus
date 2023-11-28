@@ -23,31 +23,62 @@ export default function Prediction() {
 
   const twitterId = "dummyTwitterID"
 
-  function generateSalt() {
+  const generateSalt = useCallback(() => {
     return crypto.randomBytes(8).toString('hex');
-  }
+  }, []); 
 
-  const updateHash = () => {
-      const combination = "Prediction: " + prediction + "     Twitter ID: " + twitterId + "     Salt: " + salt
-      const newHash = sha256(combination);
-      setHash(newHash)
-      setFinal(combination)
-      console.log("final: ", combination, "hash: ", newHash)
-  }
+  useEffect(() => {
+    // TODO: get the Twitter ID from auth state
+    setSalt(generateSalt())
+  }, [generateSalt]);
 
-    useEffect(() => {
-        // TODO: get the Twitter ID from auth state
-        setSalt(generateSalt())
-      }, [generateSalt]);
 
-    useEffect(() => {
-        if (prediction === "") setHash("")
-        else updateHash()
-      }, [prediction, salt, updateHash]);
+  useEffect(() => {
+      const updateHash = () => {
+          const combination = "Prediction: " + prediction + "     Twitter ID: " + twitterId + "     Salt: " + salt;
+          const newHash = sha256(combination);
+          setHash(newHash);
+          setFinal(combination);
+          console.log("final: ", combination, "hash: ", newHash);
+      };
 
-    useEffect(() => {
-      if(txsHash !== '') updateDb()
-      }, [txsHash, updateDb]);
+      if (prediction === "") setHash("");
+      else updateHash();
+  }, [prediction, salt]);
+
+
+useEffect(() => {
+  const updateDb = async () => {
+      // UPDATING DB
+      try {
+        const { data, error } = await supabase
+          .from('predictions')
+          .insert([
+            {
+              sender: 'c8b2919b-80c7-45b0-aef0-29f7ca99097e',
+              prediction_txt: final,
+              prediction_hash: hash,
+              txs_hash: txsHash
+            }
+          ])
+          .select();
+    
+        console.log("error: ", error);
+    
+        if (error) {
+          console.error('Error:', error.message);
+        } else {
+          console.log('Data:', data);
+        }
+      } catch (error) {
+        alert('Error loading user data!');
+        console.error('Unexpected error:', error);
+      }
+    };
+
+    if (txsHash !== '') updateDb();
+
+    }, [txsHash]);
 
     const handlePredictionChange = (e) => {
         setPrediction(e.target.value)
@@ -93,43 +124,12 @@ export default function Prediction() {
                 console.log("complete: ", `https://explorer.solana.com/tx/${transaction.signature}?cluster=devnet`)
                 return transaction.signature
             }
-        
-        return "error, can't get transaction signature"
-          
+        return "error, can't get transaction signature"   
       }
-          
         } catch (error) {
           console.error("This is an Erroooor: ", error);
         }
       };
-
-    const updateDb = async () => {
-      // UPDATING DB
-      try {
-        const { data, error } = await supabase
-          .from('predictions')
-          .insert([
-            {
-              sender: 'c8b2919b-80c7-45b0-aef0-29f7ca99097e',
-              prediction_txt: final,
-              prediction_hash: hash,
-              txs_hash: txsHash
-            }
-          ])
-          .select();
-    
-        console.log("error: ", error);
-    
-        if (error) {
-          console.error('Error:', error.message);
-        } else {
-          console.log('Data:', data);
-        }
-      } catch (error) {
-        alert('Error loading user data!');
-        console.error('Unexpected error:', error);
-      }
-    };
     
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
