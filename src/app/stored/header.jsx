@@ -11,7 +11,7 @@ export default function Header() {
   </div>
   <div className="flex-none">
     <ul className="menu menu-horizontal px-1">
-      <li><Link href="../create" className="">Created</Link></li>
+      <li><Link href="../create" className="">Create</Link></li>
       <li><Link href="../stored" className="">Stored</Link></li>
       <li><Link href="../profile" className="">Profile</Link></li>
     </ul>
