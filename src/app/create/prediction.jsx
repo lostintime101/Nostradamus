@@ -27,27 +27,27 @@ export default function Prediction() {
     return crypto.randomBytes(8).toString('hex');
   }
 
-    const updateHash = () => {
-        const combination = "Prediction: " + prediction + "     Twitter ID: " + twitterId + "     Salt: " + salt
-        const newHash = sha256(combination);
-        setHash(newHash)
-        setFinal(combination)
-        console.log("final: ", combination, "hash: ", newHash)
-    }
+  const updateHash = () => {
+      const combination = "Prediction: " + prediction + "     Twitter ID: " + twitterId + "     Salt: " + salt
+      const newHash = sha256(combination);
+      setHash(newHash)
+      setFinal(combination)
+      console.log("final: ", combination, "hash: ", newHash)
+  }
 
     useEffect(() => {
         // TODO: get the Twitter ID from auth state
         setSalt(generateSalt())
-      }, []);
+      }, [generateSalt]);
 
     useEffect(() => {
         if (prediction === "") setHash("")
         else updateHash()
-      }, [prediction, salt]);
+      }, [prediction, salt, updateHash]);
 
     useEffect(() => {
       if(txsHash !== '') updateDb()
-      }, [txsHash]);
+      }, [txsHash, updateDb]);
 
     const handlePredictionChange = (e) => {
         setPrediction(e.target.value)
