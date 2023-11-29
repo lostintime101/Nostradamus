@@ -24,7 +24,8 @@ export default function AuthForm() {
         theme="light"
         showLinks={false}
         providers={['twitter']}
-        redirectTo="http://localhost:3000/auth/callback"
+        // redirectTo="http://localhost:3000/auth/callback"
+        redirectTo="https://app.nostradamus1.xyz/auth/callback"
       />
   )
 }

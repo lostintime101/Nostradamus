@@ -8,16 +8,15 @@ export default async function Account() {
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
   
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const { data: { session },} = await supabase.auth.getSession()
+  const userUUID = session?.user.id
 
   return (
     <>
     <Header />
       <main className="h-screen flex flex-col ">
         <div className="container">
-          <Prediction />  
+        {userUUID && <Prediction userUUID = {userUUID}/>}  
         </div>
       </main>
     <Footer />

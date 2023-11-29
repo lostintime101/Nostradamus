@@ -13,7 +13,7 @@ export default function Header() {
     <ul className="menu menu-horizontal px-1">
       <li><Link href="../create" className="">Create</Link></li>
       <li><Link href="../stored" className="">Stored</Link></li>
-      <li><Link href="../account" className="">Profile</Link></li>
+      <li><Link href="../profile" className="">Profile</Link></li>
     </ul>
   </div>
 </div>

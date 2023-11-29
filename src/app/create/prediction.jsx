@@ -12,7 +12,7 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-export default function Prediction() {
+export default function Prediction({ userUUID }) {
 
   const crypto = require('crypto');
   const [prediction, setPrediction] = useState('')
@@ -20,18 +20,58 @@ export default function Prediction() {
   const [hash, setHash] = useState('')
   const [final, setFinal] = useState('')
   const [txsHash, setTxsHash] = useState('')
+  const [userID, setUserID] = useState('')
+  const [twitterId, setTwitterId] = useState('')
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("Inscribing the hash onchain. Please wait 10 seconds.");
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
 
-  const twitterId = "dummyTwitterID"
+  const inscribeHash = async () => {
+    setShowPopup(true);
 
-  const generateSalt = useCallback(() => {
-    return crypto.randomBytes(8).toString('hex');
-  }, []); 
+    try {
+      setButtonDisabled(true);
+      setPopupContent("Inscribing the hash onchain. Please wait.");
+      await putOnchain();
+      await sleep(10000);
+      await getTransactionHash();
+      setPopupContent("Transaction complete!");
+    } catch (error) {
+      setPopupContent("Error: Something went wrong");
+    } finally {
+      await sleep(500);
+      setShowPopup(false);
+      setButtonDisabled(false);
+    }
+  }
 
   useEffect(() => {
-    // TODO: get the Twitter ID from auth state
-    setSalt(generateSalt())
-  }, [generateSalt]);
+    setSalt(crypto.randomBytes(8).toString('hex'))
+  }, []);
 
+  useEffect(() => {
+    setUserID(userUUID)
+
+    const fetchName = async () => {
+      try {
+      let { data, error } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', userUUID);
+    
+        if (error) {
+          console.error('Error:', error.message);
+        } else {
+          console.log('User Data:', data);
+          return data[0].full_name;
+        }
+      } catch (error) {
+        console.error('Unexpected error:', error);
+      }
+    };
+    fetchName().then((name) => setTwitterId(name));
+
+  }, [userUUID]);
 
   useEffect(() => {
       const updateHash = () => {
@@ -46,7 +86,6 @@ export default function Prediction() {
       else updateHash();
   }, [prediction, salt]);
 
-
 useEffect(() => {
   const updateDb = async () => {
       // UPDATING DB
@@ -55,7 +94,7 @@ useEffect(() => {
           .from('predictions')
           .insert([
             {
-              sender: 'c8b2919b-80c7-45b0-aef0-29f7ca99097e',
+              sender: userUUID,
               prediction_txt: final,
               prediction_hash: hash,
               txs_hash: txsHash
@@ -83,6 +122,10 @@ useEffect(() => {
     const handlePredictionChange = (e) => {
         setPrediction(e.target.value)
     };
+
+    function generateSalt() {
+      return crypto.randomBytes(8).toString('hex');
+    }
 
     const putOnchain = async () => {
 
@@ -138,7 +181,7 @@ useEffect(() => {
   return (
     <>
     <div className="grid grid-cols-3 gap-8">
-    <div class="justify-self-end"></div>
+    <div className="justify-self-end"></div>
     <div className="min-w-800 max-w-2000">
         <textarea 
           className="textarea textarea-bordered textarea-lg rounded-box w-full" 
@@ -152,17 +195,17 @@ useEffect(() => {
         <span className="label-text-alt">Limit: {prediction.length} / 140 characters</span>
         </label>
     </div>
-    <div class="..."></div>
-    <div class="justify-self-end self-center">User</div>
+    <div className="..."></div>
+    <div className="justify-self-end self-center">User</div>
     <div className="">
         <label htmlFor="id"></label>
         <input 
           className="input input-bordered w-full rounded-box"
           type="text" 
-          value={twitterId} disabled 
+          value={twitterId? twitterId : "loading..."} disabled 
         />
     </div>
-    <div class="..."></div>
+    <div className="..."></div>
     <div className="tooltip tooltip-left justify-self-end self-center" 
     data-tip="random sequence"><span className="underline">?</span> Salt</div>
     <div className="">
@@ -173,9 +216,9 @@ useEffect(() => {
           value={salt} readOnly 
           />
     </div>
-    <div class="..."><button class="btn btn-outline border-gray-500 rounded-box" onClick={() => setSalt(generateSalt())}>Regenerate</button></div>
-    <div class="justify-self-end self-center">Hash</div>
-    <div class="justify-items-end">
+    <div className="..."><button className="btn btn-outline border-gray-500 rounded-box" onClick={() => setSalt(generateSalt())}>Regenerate</button></div>
+    <div className="justify-self-end self-center">Hash</div>
+    <div className="justify-items-end">
         <label htmlFor="hash"></label>
         <textarea 
           className="textarea textarea-bordered textarea-lg rounded-box w-full" 
@@ -185,20 +228,21 @@ useEffect(() => {
           value={hash} disabled
         ></textarea>
     </div>
-    <div class="..."></div>
-    <div class="justify-self-end"></div>
+    <div className="..."></div>
+    <div className="justify-self-end"></div>
     <div className="justify-self-center">
-    <button class="btn btn-wide btn-outline btn-primary rounded-box"
-        onClick={ async () => {
-          putOnchain()
-          await sleep(15000);
-          await getTransactionHash();
-        }}
+    <button className="btn btn-wide btn-outline btn-primary rounded-box"
+          onClick={inscribeHash}
+          disabled={isButtonDisabled}
         >Create</button>
-        </div>
-    <div class="..."></div>
     </div>
-    
+    <div className="..."></div>
+    </div>
+    {showPopup && (
+        <div className="flex items-center justify-center">
+          <p>{popupContent}</p>
+        </div>
+      )}
     </>
   )
 }

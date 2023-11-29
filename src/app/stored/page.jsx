@@ -8,15 +8,14 @@ export default async function Account() {
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
   
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const { data: { session },} = await supabase.auth.getSession()
+  const userUUID = session?.user.id
 
   return (
     <>
     <Header />
       <main style={{ marginTop: '70px', padding: '20px' }}>
-        <PredictionsWrapper />
+       {userUUID && <PredictionsWrapper userUUID = {userUUID}/>}
       </main>
     <Footer />
     </>

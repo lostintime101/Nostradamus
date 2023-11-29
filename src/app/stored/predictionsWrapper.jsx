@@ -10,7 +10,7 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const userUUID = 'c8b2919b-80c7-45b0-aef0-29f7ca99097e'
 
-export default function PredictionsWrapper () {
+export default function PredictionsWrapper ( {userUUID} ) {
 
 const [userPredictions, setUserPredictions] = useState([])
 
@@ -26,7 +26,7 @@ const [userPredictions, setUserPredictions] = useState([])
         let { data, error } = await supabase
             .from('predictions')
             .select("*")
-            .eq('sender', supabase.auth.user().id);
+            .eq('sender', userUUID);
       
           setUserPredictions(data)
       
