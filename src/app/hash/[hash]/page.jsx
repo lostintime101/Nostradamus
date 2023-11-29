@@ -12,7 +12,7 @@ export default async function Account() {
   const {
     data: { session },
   } = await supabase.auth.getSession()
-
+  console.log("This is the session", session)
   return (
       <>
       <Header />

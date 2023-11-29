@@ -18,12 +18,15 @@ const [userPredictions, setUserPredictions] = useState([])
       fetchPredictons()
     }, []);
 
+    console.log("supaabbbbase", supabase)
+
+    // console.log(supabase.auth.user().id, userUUID)
     const fetchPredictons = async () => {
         try {
         let { data, error } = await supabase
             .from('predictions')
             .select("*")
-            .eq('sender', userUUID);
+            .eq('sender', supabase.auth.user().id);
       
           setUserPredictions(data)
       

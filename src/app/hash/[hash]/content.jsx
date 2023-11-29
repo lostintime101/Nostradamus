@@ -43,8 +43,6 @@ useEffect(() => {
     setRawPredictionHash(thisPrediction[0].prediction_hash)
     setRawPredictionFullText(thisPrediction[0].prediction_txt)
 
-    console.log("henlo", rawPrediction, rawUser, rawSalt, rawDate, rawTxsHash, rawPredictionHash)
-
   }
 
   function formatDate(inputDate) {
@@ -77,12 +75,10 @@ const fetchPredicton = async () => {
     const currentSuffix = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
     if(currentSuffix.length != 12) return console.error("error, incorrect suffix length");
 
-    console.log("i'm fetchiiiinnnnggg")
     try {
     let { data, error } = await supabase
         .from('predictions')
         .select("*")
-        .eq('sender', userUUID)
         .ilike('prediction_hash', `${currentSuffix}%`)
   
       setThisPrediction(data)
@@ -90,7 +86,7 @@ const fetchPredicton = async () => {
       if (error) {
         console.error('Error:', error.message);
       } else {
-        console.log('Dataaaaaaaa:', data);
+        console.log('Data:', data);
       }
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -109,14 +105,14 @@ const fetchPredicton = async () => {
         <div id="section1" className="h-screen flex flex-col items-center justify-center">
           <PredictionWrapper rawDate={rawDate} rawTxsHash={rawTxsHash} rawPrediction={rawPrediction} rawUser={rawUser} rawPredictionHash={rawPredictionHash}/>
           <div className="p-4 space-x-6">
-            <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section2')}>Verify Hash</button>
-            <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section3')}>Share</button>
+            <button className="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section2')}>Verify Hash</button>
+            <button className="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section3')}>Share</button>
           </div>
         </div>
         <div id="section2" className="h-screen flex flex-col items-center justify-center">
           <Checker rawPredictionFullText={rawPredictionFullText}/>
           <div>
-          <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section3')}>Share</button>
+          <button className="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section3')}>Share</button>
           </div>
         </div>
         <div id="section3" className="h-screen flex flex-col items-center justify-center">
@@ -124,7 +120,7 @@ const fetchPredicton = async () => {
           <p>Right click image to download and share</p>
           <SharePoster rawDate={rawDate} rawTxsHash={rawTxsHash} rawPrediction={rawPrediction} rawUser={rawUser} rawPredictionHash={rawPredictionHash}/>
           <p>Or copy link: <span className="underline">{window.location.href}</span></p>
-          <button class="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section1')}>Back to top</button>
+          <button className="btn btn-wide btn-outline btn-primary rounded-box" onClick={() => scrollToSection('section1')}>Back to top</button>
           </div>
         </div>
       </main>
