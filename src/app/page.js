@@ -12,9 +12,6 @@ export default function Home() {
         <p>Sign in with Twitter is recommended</p>
         <AuthForm />
       </div>
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2" >
-        <p>Part of <Link href="https://backdropbuild.com/">Backdrop Build</Link></p>
-      </div>
         
       </div>
       <Footer />

@@ -18,7 +18,7 @@ export default function Footer() {
     </div>
   </nav> 
   <aside>
-    <p>Copyright © 2023 - All rights reserved Lostin Code</p>
+    <p>Copyright © 2024 - All rights reserved Lostin</p>
   </aside>
 </footer>
   )
